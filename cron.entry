@@ -1,0 +1,1 @@
+13 13 * * * cd somepath;php convert.php > update.log

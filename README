@@ -1,0 +1,17 @@
+This is a dynamic IP list generator.
+Depending on the arguments you get the IP4/IP6 addresses listed for countries or ASN numbers 
+
+Usage: Valid arguments are: asn, country. Seperate multiple values with Semicolon.
+Do note that platforms limits might be easily exceeded with this.
+
+ASN
+feed.php?asn=1136;33915
+Country
+feed.php?country=NL;DE
+Both
+feed.php?country=NL;DE&asn=1136;33915
+
+You can peruse the raw input data https://iserv.nl/files/edl/in/ directory and see what came https://iserv.nl/files/edl/out/, although the feed script is probably easier to integrate.
+This script came about after missing IPv6 GEO location functionality in Palo Alto (=<10.1.11) which is ... weird.
+It is also way easier to setup a ASN blocklist for questionable hosting such as "Limenet"  https://bgp.tools/as/394711
+
