@@ -15,3 +15,6 @@ You can peruse the raw input data https://iserv.nl/files/edl/in/ directory and s
 This script came about after missing IPv6 GEO location functionality in Palo Alto (=<10.1.11) which is ... weird.
 It is also way easier to setup a ASN blocklist for questionable hosting such as "Limenet"  https://bgp.tools/as/394711
 
+Contact seth dot mos at dds dot nl
+
+13-04-2024 Add newline when selecting multiple ASN or Countries
