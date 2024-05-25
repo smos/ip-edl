@@ -4,7 +4,7 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 
 $outdir = "out";
 
-if((!isset($_GET['asn'])) && (!isset($_GET['country']))) {
+if((!isset($_GET['asn'])) && (!isset($_GET['country'])) && (!isset($_GET['rir'])) ) {
 	header("Content-Type: text/plain");
 	echo file_get_contents("README");
 	exit(0);
@@ -25,7 +25,7 @@ function aslimit($as) {
 
 // Process Country value
 if(isset($_GET['rir'])) {
-	$val = strtoupper(strip_tags($_GET['rir']));
+	$val = strtolower(strip_tags($_GET['rir']));
 	$items = preg_split("/;/", $val);
 	$items = array_map('trim', $items);
 	$items = array_map('rlimit', $items);
