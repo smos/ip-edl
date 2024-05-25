@@ -139,6 +139,7 @@ function validateCidr($cidr)
 }
 
 
+$rip = array();
 $cip = array();
 $guid = array();
 $asn = array();
@@ -182,9 +183,10 @@ foreach($rirs as $rir => $info) {
 						$cidr = "{$el[3]}/{$bits}";
 						if(!validateCidr($cidr)) {
 							echo "Address '{$el[3]}/{$bits}' is not valid in {$info['file']}, skipping\n";
-							continue;
+							continue 2;
 						} else {
 							$cip[$el[1]][] = $cidr;
+							$rip[$rir][] = $cidr;
 							// echo "{$el[3]}/{$bits} \n";
 							// also save by guid for ASN lookup
 							$guid[$el[7]][] = $cidr;
@@ -238,13 +240,17 @@ foreach($iso3166 as $country) {
 // exit(0);
 
 // print_r($res);
+echo "Write Aggregate RIR lists\n";
+foreach($rip as $rir => $arr) {
+	file_put_contents("{$outdir}/rir/{$rir}.txt", implode("\n", $arr));
+
+}
+
 echo "Write Aggregate country lists from all RIRs\n";
 foreach($cip as $country => $arr) {
 	file_put_contents("{$outdir}/country/{$country}.txt", implode("\n", $arr));
 
 }
-
-
 
 echo "Parse RIR DB for ASN routes\n";
 foreach($dbs as $rir => $db) {

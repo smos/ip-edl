@@ -11,12 +11,32 @@ if((!isset($_GET['asn'])) && (!isset($_GET['country']))) {
 
 }
 
+function rlimit($cl) {
+	return substr($cl, 0, 7);
+}
+
 function climit($cl) {
 	return substr($cl, 0, 2);
 }
 
 function aslimit($as) {
 	return substr($as, 0, 6);
+}
+
+// Process Country value
+if(isset($_GET['rir'])) {
+	$val = strtoupper(strip_tags($_GET['rir']));
+	$items = preg_split("/;/", $val);
+	$items = array_map('trim', $items);
+	$items = array_map('rlimit', $items);
+	// print_r($items);
+
+	foreach($items as $rir) {
+		if(is_readable("{$outdir}/rir/{$rir}.txt")) {
+			echo file_get_contents("{$outdir}/rir/{$rir}.txt");
+		}
+	}
+
 }
 
 // Process Country value

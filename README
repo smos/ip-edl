@@ -16,5 +16,7 @@ This script came about after missing IPv6 GEO location functionality in Palo Alt
 It is also way easier to setup a ASN blocklist for questionable hosting such as "Limenet"  https://bgp.tools/as/394711
 
 Contact seth dot mos at dds dot nl
+Guthub: https://github.com/smos/ip-edl/
 
 13-04-2024 Add newline when selecting multiple ASN or Countries
+25-05-2024 Add RIR files to the output, and fetch from feed.php
