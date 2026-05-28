@@ -10,6 +10,8 @@ Country
 feed.php?country=NL;DE
 Both
 feed.php?country=NL;DE&asn=1136;33915
+Only IP6
+feed.php?asn=1136;33915&proto=ip6
 
 You can peruse the raw input data https://iserv.nl/files/edl/in/ directory and see what came https://iserv.nl/files/edl/out/, although the feed script is probably easier to integrate.
 This script came about after missing IPv6 GEO location functionality in Palo Alto (=<10.1.11) which is ... weird.
@@ -20,3 +22,4 @@ Guthub: https://github.com/smos/ip-edl/
 
 13-04-2024 Add newline when selecting multiple ASN or Countries
 25-05-2024 Add RIR files to the output, and fetch from feed.php
+28-05-2026 Make it possible to filter on address family with the proto=ip4 proto=ip6 options, ommit for both
