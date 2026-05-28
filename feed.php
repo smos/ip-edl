@@ -105,6 +105,7 @@ if(isset($_GET['asn'])) {
 if( isset( $_GET['format'] ) ) {
 	switch( strtolower( $_GET['format'] ) ){
 		case 'json':
+			header('Content-type: application/json');
 			echo( json_encode( $result ) );
 			break;
 		case 'php':
