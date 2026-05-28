@@ -4,12 +4,38 @@ Depending on the arguments you get the IP4/IP6 addresses listed for countries or
 Usage: Valid arguments are: asn, country. Seperate multiple values with Semicolon.
 Do note that platforms limits might be easily exceeded with this.
 
-ASN
-feed.php?asn=1136;33915
-Country
-feed.php?country=NL;DE
-Both
-feed.php?country=NL;DE&asn=1136;33915
+# ASN
+The `asn` parameter takes a single or semicolon separated list of ASNs.
+
+	feed.php?asn=1136;33915
+
+# Country
+The `country` parameter takes a single or semicolon separated list of country codes
+
+	feed.php?country=NL;DE
+
+# RIR
+The `RIR` parameter takes a single or semicolon separated list of RIR names.
+Valid names are `afrinic|apnic|arin|lacnic|ripencc`
+
+	feed.php?rir=afrinic;ripencc
+
+# Protocol
+The `proto` parameter takes a single of `ipv4|ipv6|both`.
+
+	feed.php?proto=ipv4
+
+# Output Format
+The `format` parameter takes a single value of `php|json|raw`
+
+	feed.php?format=json
+
+# Combined
+The above parameters can be combined using ampersand ("&") to return multiple networks
+probably filtered by ipv4 or ipv6 and formatted as requested as JSON, PHP var_export
+or raw ASCII.
+
+	feed.php?country=NL;DE&asn=1136;33915&proto=ipv4&format=JSON
 
 You can peruse the raw input data https://iserv.nl/files/edl/in/ directory and see what came https://iserv.nl/files/edl/out/, although the feed script is probably easier to integrate.
 This script came about after missing IPv6 GEO location functionality in Palo Alto (=<10.1.11) which is ... weird.
