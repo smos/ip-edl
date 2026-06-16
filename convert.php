@@ -6,6 +6,13 @@ if(isset($_SERVER['REMOTE_ADDR'])) {
 	echo "This should be run from the CLI\n";
 	exit(0);
 }
+
+if (!empty($argv[1])) {
+	$dstr = $argv[1];
+	echo "debug for string {$argv[1]}";
+}
+
+
 $regs = array("ripencc", "apnic", "arin", "afrinic", "lacnic");
 $indir = "in";
 $outdir = "out";
@@ -65,16 +72,18 @@ foreach($cdbs as $rir => $db) {
 	$onlineserial = "";
 	$localserial = "";
 
-	$onlineserial  = file_get_contents($db['hash']);
+	$onlineserial  = preg_match("/([a-f0-9]{32})/", file_get_contents($db['hash']), $matches);
+	$onlineserial = $matches[1];
+	// print_r($matches);
 	$dbfile = basename($db['db']);
-	if(is_readable("{$indir}/{$dbfile}.hash"))
-		$localserial  = file_get_contents("{$indir}/{$dbfile}.hash");
+	if(is_readable("{$indir}/{$dbfile}"))
+		$localserial  = md5_file("{$indir}/{$dbfile}");
 
-	if((floatval($onlineserial) != floatval($localserial)) || (empty($localserial))) {
-		echo "Download file {$db['db']}\n";
+	if(($onlineserial != $localserial) || (empty($localserial))) {
+		echo "Online {$onlineserial} does not match {$localserial}, download file {$db['db']}\n";
 		if (file_put_contents("{$indir}/{$dbfile}", file_get_contents($db['db']))) {
 			echo "File {$dbfile} downloaded successfully\n";
-			file_put_contents("{$indir}/{$dbfile}.hash", $onlineserial);
+			// file_put_contents("{$indir}/{$dbfile}.hash", $onlineserial);
 		} else {
 			echo "Failed to download {$dbfile}\n";
 		}
@@ -167,7 +176,8 @@ foreach($rirs as $rir => $info) {
 					// 2 is country
 					$asn[$el[3]] = $el[7];
 					$asguid[$el[7]] = $el[3];
-					// echo "Found AS {$el[3]} RIR {$rir} guid {$el[7]}\n";
+					if(isset($dstr) && ($dstr == $el[3]))
+						echo "\nFound AS {$el[3]} RIR {$rir} guid {$el[7]}\n";
 					// print_r($el);
 					break;
 				case "ipv6":
@@ -190,6 +200,8 @@ foreach($rirs as $rir => $info) {
 							// echo "{$el[3]}/{$bits} \n";
 							// also save by guid for ASN lookup
 							$guid[$el[7]][] = $cidr;
+							if(isset($dstr) && ($dstr == $cidr))
+								echo "\nadd $cidr to country ip {$el[1]} rir ip {$rir} guid {$el[7]}\n";
 						}
 
 					}
@@ -209,7 +221,8 @@ foreach($rirs as $rir => $info) {
 		foreach($asn as $as => $id) {
 			if(isset($guid[$id])) {
 				// $arr = $guid[$id];
-				// echo "Found AS {$as} on {$rir} with {$id}\n";
+				if(isset($dstr) && ($dstr == $id))
+					echo "\nFound AS {$as} on {$rir} with {$id}\n";
 				if(!isset($asroutes[$as]))
 					$asroutes[$as] = $guid[$id];
 				else
@@ -276,7 +289,8 @@ foreach($dbs as $rir => $db) {
 
 			if((isset($route)) && (isset($asnum))) {
 				$asroutes[$asnum][] = trim($route);
-				// echo "Add route {$route} for AS {$asnum}\n";
+				if(isset($dstr) && ($dstr == $route))
+					echo "Add route {$route} for AS {$asnum}\n";
 				unset($route);
 				unset($asnum);
 			}

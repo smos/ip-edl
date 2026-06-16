@@ -4,38 +4,14 @@ Depending on the arguments you get the IP4/IP6 addresses listed for countries or
 Usage: Valid arguments are: asn, country. Seperate multiple values with Semicolon.
 Do note that platforms limits might be easily exceeded with this.
 
-# ASN
-The `asn` parameter takes a single or semicolon separated list of ASNs.
-
-	feed.php?asn=1136;33915
-
-# Country
-The `country` parameter takes a single or semicolon separated list of country codes
-
-	feed.php?country=NL;DE
-
-# RIR
-The `RIR` parameter takes a single or semicolon separated list of RIR names.
-Valid names are `afrinic|apnic|arin|lacnic|ripencc`
-
-	feed.php?rir=afrinic;ripencc
-
-# Protocol
-The `proto` parameter takes a single of `ipv4|ipv6|both`.
-
-	feed.php?proto=ipv4
-
-# Output Format
-The `format` parameter takes a single value of `php|json|raw`
-
-	feed.php?format=json
-
-# Combined
-The above parameters can be combined using ampersand ("&") to return multiple networks
-probably filtered by ipv4 or ipv6 and formatted as requested as JSON, PHP var_export
-or raw ASCII.
-
-	feed.php?country=NL;DE&asn=1136;33915&proto=ipv4&format=JSON
+ASN
+feed.php?asn=1136;33915
+Country
+feed.php?country=NL;DE
+Both
+feed.php?country=NL;DE&asn=1136;33915
+Only IP6
+feed.php?asn=1136;33915&proto=ip6
 
 You can peruse the raw input data https://iserv.nl/files/edl/in/ directory and see what came https://iserv.nl/files/edl/out/, although the feed script is probably easier to integrate.
 This script came about after missing IPv6 GEO location functionality in Palo Alto (=<10.1.11) which is ... weird.
@@ -46,3 +22,4 @@ Guthub: https://github.com/smos/ip-edl/
 
 13-04-2024 Add newline when selecting multiple ASN or Countries
 25-05-2024 Add RIR files to the output, and fetch from feed.php
+28-05-2026 Make it possible to filter on address family with the proto=ip4 proto=ip6 options, ommit for both

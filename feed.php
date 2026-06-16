@@ -3,6 +3,7 @@
 error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 
 $outdir = "out";
+$filter = "";
 
 $result = [];
 
@@ -42,7 +43,23 @@ function aslimit($as) {
 	return substr($as, 0, 6);
 }
 
-// Process RIR value
+// Process Country value
+if(isset($_GET['proto'])) {
+	switch($_GET['proto']) {
+		case "ip4":
+			$filter = ".";
+			break;
+		case "ip6":
+			$filter = ":";
+			break;
+		default:
+			$filter = "";
+			break;
+
+	}
+
+}
+// Process Country value
 if(isset($_GET['rir'])) {
 	$val = strtolower(strip_tags($_GET['rir']));
 	$items = preg_split("/;/", $val);
@@ -51,13 +68,12 @@ if(isset($_GET['rir'])) {
 	// print_r($items);
 
 	foreach($items as $rir) {
-		$file = "{$outdir}/rir/{$rir}.txt";
-		if(is_readable( $file )) {
-			$content = explode( "\n", file_get_contents( $file ) );
-			foreach( $content as $cidr ) {
-				[ $subnet, $mask ] = explode( "/", $cidr );
-				if( filter_var( $subnet, FILTER_VALIDATE_IP, $filter_flag ) ) $result[] = $cidr;
-			}
+		if(is_readable("{$outdir}/rir/{$rir}.txt")) {
+			$lines = file("{$outdir}/rir/{$rir}.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+			$filtered = array_filter($lines, fn($line) => str_contains($line, $filter));
+
+			echo implode(PHP_EOL, $filtered);
+			//echo file_get_contents("{$outdir}/rir/{$rir}.txt");
 		}
 	}
 }
@@ -71,13 +87,12 @@ if(isset($_GET['country'])) {
 	// print_r($items);
 
 	foreach($items as $country) {
-		$file = "{$outdir}/country/{$country}.txt";
-		if(is_readable( $file )) {
-			$content = explode( "\n", file_get_contents( $file ) );
-			foreach( $content as $cidr ) {
-				[ $subnet, $mask ] = explode( "/", $cidr );
-				if( filter_var( $subnet, FILTER_VALIDATE_IP, $filter_flag ) ) $result[] = $cidr;
-			}
+		if(is_readable("{$outdir}/country/{$country}.txt")) {
+			$lines = file("{$outdir}/country/{$country}.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+			$filtered = array_filter($lines, fn($line) => str_contains($line, $filter));
+
+			echo implode(PHP_EOL, $filtered);
+			// echo file_get_contents("{$outdir}/country/{$country}.txt");
 		}
 	}
 }
@@ -91,13 +106,12 @@ if(isset($_GET['asn'])) {
 	//print_r($items);
 
 	foreach($items as $as) {
-		$file = "{$outdir}/asn/AS{$as}.txt";
-		if(is_readable( $file )) {
-			$content = explode( "\n", file_get_contents( $file ) );
-			foreach( $content as $cidr ) {
-				[ $subnet, $mask ] = explode( "/", $cidr );
-				if( filter_var( $subnet, FILTER_VALIDATE_IP, $filter_flag ) ) $result[] = $cidr;
-			}
+		if(is_readable("{$outdir}/asn/AS{$as}.txt")) {
+			$lines = file("{$outdir}/asn/AS{$as}.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+			$filtered = array_filter($lines, fn($line) => str_contains($line, $filter));
+
+			echo implode(PHP_EOL, $filtered);
+			// echo file_get_contents("{$outdir}/asn/AS{$as}.txt");
 		}
 	}
 }
