@@ -5,11 +5,30 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 $outdir = "out";
 $filter = "";
 
+$result = [];
+
 if((!isset($_GET['asn'])) && (!isset($_GET['country'])) && (!isset($_GET['rir'])) ) {
 	header("Content-Type: text/plain");
 	echo file_get_contents("README");
 	exit(0);
 
+}
+
+if( isset( $_GET['proto'] ) ) {
+	switch( $_GET['proto'] ) {
+		case 'ipv4':
+			$filter_flag = FILTER_FLAG_IPV4;
+			break;
+		case 'ipv6':
+			$filter_flag = FILTER_FLAG_IPV6;
+			break;
+		case 'both':
+		default:
+			$filter_flag = FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6;
+			break;
+	}
+} else {
+	$filter_flag = FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6;
 }
 
 function rlimit($cl) {
@@ -57,7 +76,6 @@ if(isset($_GET['rir'])) {
 			//echo file_get_contents("{$outdir}/rir/{$rir}.txt");
 		}
 	}
-
 }
 
 // Process Country value
@@ -77,10 +95,9 @@ if(isset($_GET['country'])) {
 			// echo file_get_contents("{$outdir}/country/{$country}.txt");
 		}
 	}
-
 }
 
-// Process Country value
+// Process ASN value
 if(isset($_GET['asn'])) {
 	$val = strtoupper(strip_tags($_GET['asn']));
 	$items = preg_split("/;/", $val);
@@ -97,6 +114,22 @@ if(isset($_GET['asn'])) {
 			// echo file_get_contents("{$outdir}/asn/AS{$as}.txt");
 		}
 	}
-
 }
 
+if( isset( $_GET['format'] ) ) {
+	switch( strtolower( $_GET['format'] ) ){
+		case 'json':
+			header('Content-type: application/json');
+			echo( json_encode( $result ) );
+			break;
+		case 'php':
+			echo( var_export( $result, true ) );
+			break;
+		case 'raw':
+		default:
+			echo( implode( "\n", $result ) );
+			break;
+	}
+} else {
+	echo( implode( "\n", $result ) );
+}
