@@ -47,9 +47,11 @@ function aslimit($as) {
 if(isset($_GET['proto'])) {
 	switch($_GET['proto']) {
 		case "ip4":
+		case "ipv4":
 			$filter = ".";
 			break;
 		case "ip6":
+		case "ipv6":
 			$filter = ":";
 			break;
 		default:
@@ -72,7 +74,7 @@ if(isset($_GET['rir'])) {
 			$lines = file("{$outdir}/rir/{$rir}.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 			$filtered = array_filter($lines, fn($line) => str_contains($line, $filter));
 
-			echo implode(PHP_EOL, $filtered);
+			echo implode(PHP_EOL, $filtered) . "\n";
 			//echo file_get_contents("{$outdir}/rir/{$rir}.txt");
 		}
 	}
@@ -91,7 +93,7 @@ if(isset($_GET['country'])) {
 			$lines = file("{$outdir}/country/{$country}.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 			$filtered = array_filter($lines, fn($line) => str_contains($line, $filter));
 
-			echo implode(PHP_EOL, $filtered);
+			echo implode(PHP_EOL, $filtered) . "\n";
 			// echo file_get_contents("{$outdir}/country/{$country}.txt");
 		}
 	}
@@ -110,7 +112,7 @@ if(isset($_GET['asn'])) {
 			$lines = file("{$outdir}/asn/AS{$as}.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 			$filtered = array_filter($lines, fn($line) => str_contains($line, $filter));
 
-			echo implode(PHP_EOL, $filtered);
+			echo implode(PHP_EOL, $filtered) . "\n";
 			// echo file_get_contents("{$outdir}/asn/AS{$as}.txt");
 		}
 	}
