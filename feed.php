@@ -14,23 +14,6 @@ if((!isset($_GET['asn'])) && (!isset($_GET['country'])) && (!isset($_GET['rir'])
 
 }
 
-if( isset( $_GET['proto'] ) ) {
-	switch( $_GET['proto'] ) {
-		case 'ipv4':
-			$filter_flag = FILTER_FLAG_IPV4;
-			break;
-		case 'ipv6':
-			$filter_flag = FILTER_FLAG_IPV6;
-			break;
-		case 'both':
-		default:
-			$filter_flag = FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6;
-			break;
-	}
-} else {
-	$filter_flag = FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6;
-}
-
 function rlimit($cl) {
 	return substr($cl, 0, 7);
 }
